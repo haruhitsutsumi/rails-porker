@@ -1,0 +1,29 @@
+<div class="main-view">
+  <div class="container">
+    <div class="header">
+      <h1>Check a Poker Hand</h1>
+    </div>
+
+    <div class="main">
+      <%= form_tag("/home/judge")do %>
+      <div class="inputarea">
+        <input class="inputbox" name="hands" value="<%= @input%>" placeholder="S10 H11 D12 C13 H1"></input>
+      </div>
+      <div class="inputbtnarea">
+        <input class="inputbtn" type="submit" value="Check">
+      </div>
+      <% end %>
+      <% if @error_message %>
+      <div class="error_message">
+          <%= simple_format(@error_message)%>
+      </div>
+      <% end %>
+      <div class="hand">
+        <%= @hand.fainalj%>
+      </div>
+    </div>
+    <div class="footer">
+      <p>©Copyright <%= @year%> porkerhands All Rights Reserved.</p>
+    </div>
+
+</div>
