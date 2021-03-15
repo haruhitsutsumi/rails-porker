@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210310004845) do
+ActiveRecord::Schema.define(version: 20210315234458) do
 
   create_table "hands", force: :cascade do |t|
-    t.string   "flashj"
+    t.boolean  "flashj"
     t.string   "pairj"
-    t.string   "straightj"
-    t.string   "fainalj"
+    t.boolean  "straightj"
+    t.string   "finalj"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "array1"

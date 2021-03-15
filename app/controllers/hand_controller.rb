@@ -12,7 +12,7 @@ before_action :inputcheck,{only:[:judge]}
     @hand.flashj = @hand.fjudge
     @hand.pairj = @hand.pjudge
     @hand.straightj = @hand.sjudge
-    @hand.fainalj = @hand.finaljudge
+    @hand.finalj = @hand.finaljudge
     @input = params[:hands]
     render("hand/top")
   end

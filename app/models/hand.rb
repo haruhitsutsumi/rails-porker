@@ -2,17 +2,15 @@ class Hand < ApplicationRecord
 
   #flashの判定を行う
   def fjudge
-    
-
     if [self.array1[/s|d|c|h/],
       self.array2[/s|d|c|h/],
       self.array3[/s|d|c|h/],
       self.array4[/s|d|c|h/],
       self.array5[/s|d|c|h/]].uniq.length == 1
 
-      return "true"
+      return true
     else
-      return "false"
+      return false
     end
   end
 
@@ -30,9 +28,9 @@ class Hand < ApplicationRecord
        (handsarraynum.sort![3] - handsarraynum.sort![2] == 1||9) &&
        (handsarraynum.sort![2] - handsarraynum.sort![1] == 1||9) &&
        (handsarraynum.sort![1] - handsarraynum.sort![0] == 1||9)
-      return "true"
+      return true
     else
-      return "false"
+      return false
     end
     
   end
@@ -67,13 +65,13 @@ class Hand < ApplicationRecord
 
   #flash,pair,straightの判定に基づき役名の判定を行う
   def finaljudge
-    if self.flashj == "true" && self.straightj == "true"
+    if self.flashj == true && self.straightj == true
       return "ストレート・フラッシュ"
-    elsif self.flashj == "true" && self.straightj == "false"
+    elsif self.flashj == true && self.straightj == false
       return "フラッシュ"
-    elsif self.flashj == "false" && self.straightj == "true"
+    elsif self.flashj == false && self.straightj == true
       return "ストレート"
-    elsif self.flashj == "false" && self.straightj == "false" && self.pairj == "highcard"
+    elsif self.flashj == false && self.straightj == false && self.pairj == "highcard"
       return "ハイカード"
     elsif self.pairj == "fourcard"
       return "フォーカード"
