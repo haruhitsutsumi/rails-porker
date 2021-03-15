@@ -41,7 +41,6 @@ before_action :inputcheck,{only:[:judge]}
       @hand.array4.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil||
       @hand.array5.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
 
-
 #繰り返しでかけないか模索中
 =begin
         index = 1
@@ -52,7 +51,6 @@ before_action :inputcheck,{only:[:judge]}
           end
         end
 =end
-        
         #各文字の形式をチェックする
         if @hand.array1.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
           array1j = "false"
