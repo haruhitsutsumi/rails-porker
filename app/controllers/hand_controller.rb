@@ -1,6 +1,6 @@
 class HandController < ApplicationController
 before_action :setyear
-before_action :inputcheck,{only:[:judge]}
+before_action :valid,{only:[:judge]}
 
   def top
     @hand = Hand.new
@@ -17,7 +17,7 @@ before_action :inputcheck,{only:[:judge]}
     render("hand/top")
   end
   
-  def inputcheck
+  def valid
     #文字列を空白で分割し配列にしている
     handsarray = params[:hands].split(" ")
       #配列の各数字を格納
