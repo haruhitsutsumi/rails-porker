@@ -1,5 +1,4 @@
 class HandController < ApplicationController
-before_action :setyear
 before_action :valid,{only:[:judge]}
 
   def top
@@ -84,9 +83,5 @@ before_action :valid,{only:[:judge]}
     end
   end
 
-  def setyear
-    @year=Date.current.strftime("%Y")
-    
-  end
 
 end
