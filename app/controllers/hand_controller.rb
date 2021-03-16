@@ -19,6 +19,8 @@ before_action :valid,{only:[:judge]}
   def valid
     #文字列を空白で分割し配列にしている
     handsarray = params[:hands].split(" ")
+    FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
+    LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
       #配列の各数字を格納
       @hand = Hand.new(
         array1: handsarray[0],
@@ -26,19 +28,18 @@ before_action :valid,{only:[:judge]}
         array3: handsarray[2],
         array4: handsarray[3],
         array5: handsarray[4])
-
     #全体の形式チェック
-    if params[:hands].match(/\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/) == nil
+    if params[:hands].match(FORMATCHECK) == nil
       @error_message ="5つのカード指定文字を半角スペース区切りで入力してください。（例："+"S1 H3 D9 C13 S11"+"）"
       @input = params[:hands]
       render("hand/top")
     #文字形式チェック
 
-    elsif @hand.array1.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil ||
-      @hand.array2.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil ||
-      @hand.array3.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil||
-      @hand.array4.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil||
-      @hand.array5.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
+    elsif @hand.array1.match() == nil ||
+      @hand.array2.match(LETTERCHECK) == nil ||
+      @hand.array3.match(LETTERCHECK) == nil||
+      @hand.array4.match(LETTERCHECK) == nil||
+      @hand.array5.match(LETTERCHECK) == nil
 
 #繰り返しでかけないか模索中
 =begin
