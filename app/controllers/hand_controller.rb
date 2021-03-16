@@ -1,6 +1,9 @@
 class HandController < ApplicationController
 before_action :valid,{only:[:judge]}
 
+FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
+LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
+
   def top
     @hand = Hand.new
     @input = nil
@@ -19,8 +22,7 @@ before_action :valid,{only:[:judge]}
   def valid
     #文字列を空白で分割し配列にしている
     handsarray = params[:hands].split(" ")
-    FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
-    LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
+
       #配列の各数字を格納
       @hand = Hand.new(
         array1: handsarray[0],
@@ -35,22 +37,12 @@ before_action :valid,{only:[:judge]}
       render("hand/top")
     #文字形式チェック
 
-    elsif @hand.array1.match() == nil ||
+    elsif @hand.array1.match(LETTERCHECK) == nil ||
       @hand.array2.match(LETTERCHECK) == nil ||
       @hand.array3.match(LETTERCHECK) == nil||
       @hand.array4.match(LETTERCHECK) == nil||
       @hand.array5.match(LETTERCHECK) == nil
 
-#繰り返しでかけないか模索中
-=begin
-        index = 1
-        handsarray.each do |array|
-          if array.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
-            array="#{index}番目のカード指定文字が不正です。（#{array}）\r"
-            index += 1
-          end
-        end
-=end
         #各文字の形式をチェックする
         if @hand.array1.match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
           array1j = "false"
