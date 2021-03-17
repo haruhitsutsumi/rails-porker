@@ -1,40 +1,34 @@
-class HandController < ApplicationController
-before_action :valid,{only:[:judge]}
+class HandsController < ApplicationController
+
+#before_action :valid,{only:[:judge]}
 
 FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
 LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
 
   def top
-    @hand = Hand.new
     @input = nil
   end
 
   def judge
+    @hand = Hand.new(params[:hands])
     #格納した数字を元に各メソッドを呼び出し
     @hand.flashj = @hand.fjudge
     @hand.pairj = @hand.pjudge
     @hand.straightj = @hand.sjudge
     @hand.finalj = @hand.finaljudge
     @input = params[:hands]
-    render("hand/top")
+    render("hands/top")
   end
-  
-  def valid
-    #文字列を空白で分割し配列にしている
-    handsarray = params[:hands].split(" ")
 
-      #配列の各数字を格納
-      @hand = Hand.new(
-        array1: handsarray[0],
-        array2: handsarray[1],
-        array3: handsarray[2],
-        array4: handsarray[3],
-        array5: handsarray[4])
+
+  def valid
+    #配列の各数字を格納
+    @hand = Hand.new(params[:hands])
     #全体の形式チェック
     if params[:hands].match(FORMATCHECK) == nil
       @error_message ="5つのカード指定文字を半角スペース区切りで入力してください。（例："+"S1 H3 D9 C13 S11"+"）"
       @input = params[:hands]
-      render("hand/top")
+      render("hands/top")
     #文字形式チェック
 
     elsif @hand.array1.match(LETTERCHECK) == nil ||
@@ -67,14 +61,15 @@ LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
         
       @error_message = "#{@array1em}#{@array2em}#{@array3em}#{@array4em}#{@array5em}半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
       @input = params[:hands]
-    render("hand/top")
+    render("hands/top")
     #重複チェック
     elsif [@hand.array1,@hand.array2,@hand.array3,@hand.array4,@hand.array5].uniq.length != 5
       @error_message ="カードが重複してます。"
       @input = params[:hands]
-      render("hand/top")
+      render("hands/top")
     end
   end
 
-
 end
+
+

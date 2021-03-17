@@ -1,5 +1,19 @@
 class Hand < ApplicationRecord
 
+attr_accessor :hands, :cards, :array1, :array2, :array3, :array4, :array5
+attr_accessor :flashj, :pairj, :straightj, :finalj
+
+def initialize(cards)
+  self.cards = cards
+  self.hands = self.cards.split(" ")
+  self.array1 = self.hands[0]
+  self.array2 = self.hands[1]
+  self.array3 = self.hands[2]
+  self.array4 = self.hands[3]
+  self.array5 = self.hands[4]
+end
+
+
   #flashの判定を行う
   def fjudge
     if [self.array1[/s|d|c|h/],
@@ -7,7 +21,7 @@ class Hand < ApplicationRecord
       self.array3[/s|d|c|h/],
       self.array4[/s|d|c|h/],
       self.array5[/s|d|c|h/]].uniq.length == 1
-
+      @test="123"
       return true
     else
       return false
@@ -87,5 +101,8 @@ class Hand < ApplicationRecord
       return "プータロー"
     end
   end
+
+
+
 
 end

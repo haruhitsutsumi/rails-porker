@@ -5,7 +5,7 @@
     </div>
 
     <div class="main">
-      <%= form_tag("/hand/judge")do %>
+      <%= form_tag("/hands/judge")do %>
       <div class="inputarea">
         <input class="inputbox" name="hands" value="<%= @input%>" placeholder="S10 H11 D12 C13 H1"></input>
       </div>
@@ -18,9 +18,12 @@
           <%= simple_format(@error_message)%>
       </div>
       <% end %>
+      <% if @hand %>
       <div class="hand">
         <%= @hand.finalj%>
       </div>
+      <% end %>
+
     </div>
     <div class="footer">
       <p>©Copyright 2021 porkerhands All Rights Reserved.</p>
