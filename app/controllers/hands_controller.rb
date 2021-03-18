@@ -1,4 +1,5 @@
 class HandsController < ApplicationController
+require "./app/services/hand"
 
   def top
     @input = nil

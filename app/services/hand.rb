@@ -126,4 +126,7 @@ end
     end
   end
   private :flash?, :pairjudge, :straight?
+
+
+
 end
