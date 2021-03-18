@@ -3,7 +3,6 @@
     <div class="header">
       <h1>Check a Poker Hand</h1>
     </div>
-
     <div class="main">
       <%= form_tag("/hands/judge")do %>
       <div class="inputarea">
@@ -15,7 +14,7 @@
       <% end %>
       <% if @hand.error_message %>
       <div class="error_message">
-          <%= simple_format(@hand.error_message)%>
+        <%= simple_format(@hand.error_message)%>
       </div>
       <% end %>
       <% if @hand %>
@@ -23,10 +22,9 @@
         <%= @hand.finalj%>
       </div>
       <% end %>
-
     </div>
     <div class="footer">
       <p>©Copyright 2021 porkerhands All Rights Reserved.</p>
     </div>
-
+  </div>
 </div>
