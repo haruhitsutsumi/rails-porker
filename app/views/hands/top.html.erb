@@ -13,9 +13,9 @@
         <input class="inputbtn" type="submit" value="Check">
       </div>
       <% end %>
-      <% if @error_message %>
+      <% if @hand.error_message %>
       <div class="error_message">
-          <%= simple_format(@error_message)%>
+          <%= simple_format(@hand.error_message)%>
       </div>
       <% end %>
       <% if @hand %>

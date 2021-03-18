@@ -1,27 +1,76 @@
 class Hand < ApplicationRecord
 
 attr_accessor :hands, :cards, :array1, :array2, :array3, :array4, :array5
-attr_accessor :flashj, :pairj, :straightj, :finalj
+attr_accessor :flashj, :pairj, :straightj, :finalj, :error_message
 
+FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
+LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
+
+
+=begin
 def initialize(cards)
   self.cards = cards
   self.hands = self.cards.split(" ")
-  self.array1 = self.hands[0]
-  self.array2 = self.hands[1]
-  self.array3 = self.hands[2]
-  self.array4 = self.hands[3]
-  self.array5 = self.hands[4]
+  self.hands[0] = self.hands[0]
+  self.hands[1] = self.hands[1]
+  self.hands[2] = self.hands[2]
+  self.hands[3] = self.hands[3]
+  self.hands[4] = self.hands[4]
 end
+=end
+
+  def valid
+    #全体の形式チェック
+    if self.cards.match(FORMATCHECK) == nil
+      self.error_message ="5つのカード指定文字を半角スペース区切りで入力してください。（例："+"S1 H3 D9 C13 S11"+"）"
+      @input = self.cards
+      return false
+    #文字形式チェック
+    elsif
+      self.hands[0].match(LETTERCHECK) == nil ||
+      self.hands[1].match(LETTERCHECK) == nil ||
+      self.hands[2].match(LETTERCHECK) == nil||
+      self.hands[3].match(LETTERCHECK) == nil||
+      self.hands[4].match(LETTERCHECK) == nil
+
+        #各文字の形式をチェックする
+        if self.hands[0].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
+          @array1em = "1番目のカード指定文字が不正です。（#{self.hands[0]}）\r"
+        end
+        if self.hands[1].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
+          @array2em = "2番目のカード指定文字が不正です。（#{self.hands[1]}）\r"
+        end
+        if self.hands[2].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
+          @array3em = "3番目のカード指定文字が不正です。（#{self.hands[2]}）\r"
+        end
+        if self.hands[3].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
+          @array4em = "4番目のカード指定文字が不正です。（#{self.hands[3]}）\r"
+        end
+        if self.hands[4].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
+          @array5em = "5番目のカード指定文字が不正です。（#{self.hands[4]}）\r"
+        end
+        
+      self.error_message = "#{@array1em}#{@array2em}#{@array3em}#{@array4em}#{@array5em}半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
+      return false
+#     @input = self.cards
+    #重複チェック
+    elsif [self.hands[0],self.hands[1],self.hands[2],self.hands[3],self.hands[4]].uniq.length != 5
+      self.error_message ="カードが重複してます。"
+#    @input = self.cards
+      return false
+    end
+  end
+
+
 
 
   #flashの判定を行う
   def fjudge
-    if [self.array1[/s|d|c|h/],
-      self.array2[/s|d|c|h/],
-      self.array3[/s|d|c|h/],
-      self.array4[/s|d|c|h/],
-      self.array5[/s|d|c|h/]].uniq.length == 1
-      @test="123"
+    if [self.hands[0][/s|d|c|h/],
+      self.hands[1][/s|d|c|h/],
+      self.hands[2][/s|d|c|h/],
+      self.hands[3][/s|d|c|h/],
+      self.hands[4][/s|d|c|h/]].uniq.length == 1
       return true
     else
       return false
@@ -31,11 +80,11 @@ end
   #straightの判定を行う
   def sjudge
     handsarraynum = [
-      self.array1[/([1-9]|1[0-3])\b/].to_i,
-      self.array2[/([1-9]|1[0-3])\b/].to_i,
-      self.array3[/([1-9]|1[0-3])\b/].to_i,
-      self.array4[/([1-9]|1[0-3])\b/].to_i,
-      self.array5[/([1-9]|1[0-3])\b/].to_i]
+      self.hands[0][/([1-9]|1[0-3])\b/].to_i,
+      self.hands[1][/([1-9]|1[0-3])\b/].to_i,
+      self.hands[2][/([1-9]|1[0-3])\b/].to_i,
+      self.hands[3][/([1-9]|1[0-3])\b/].to_i,
+      self.hands[4][/([1-9]|1[0-3])\b/].to_i]
 
     if
        (handsarraynum.sort![4] - handsarraynum.sort![3] == 1||9) &&
@@ -53,11 +102,11 @@ end
   def pjudge
     #インスタンスで持ってる各カードから数字を抽出し、配列を作成
     handsarraynum = [
-      self.array1[/([1-9]|1[0-3])\b/],
-      self.array2[/([1-9]|1[0-3])\b/],
-      self.array3[/([1-9]|1[0-3])\b/],
-      self.array4[/([1-9]|1[0-3])\b/],
-      self.array5[/([1-9]|1[0-3])\b/]]
+      self.hands[0][/([1-9]|1[0-3])\b/],
+      self.hands[1][/([1-9]|1[0-3])\b/],
+      self.hands[2][/([1-9]|1[0-3])\b/],
+      self.hands[3][/([1-9]|1[0-3])\b/],
+      self.hands[4][/([1-9]|1[0-3])\b/]]
 
     #数字だけの配列を、数字ごとにグルーピングしたハッシュを作り、ハッシュのキーをカウントした配列を作ってる
     handsarraynumcount = handsarraynum.group_by{|han| han}.map{|k,v| v.count}
