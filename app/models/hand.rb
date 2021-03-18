@@ -1,4 +1,4 @@
-class Hand < ApplicationRecord
+class Hand
 
 attr_accessor :hands, :cards, :finalj, :error_message
 
