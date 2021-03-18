@@ -1,30 +1,24 @@
 class Hand < ApplicationRecord
 
-attr_accessor :hands, :cards, :array1, :array2, :array3, :array4, :array5
-attr_accessor :flashj, :pairj, :straightj, :finalj, :error_message
+attr_accessor :hands, :cards, :finalj, :error_message
 
 FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
 LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
-
 
 =begin
 def initialize(cards)
   self.cards = cards
   self.hands = self.cards.split(" ")
-  self.hands[0] = self.hands[0]
-  self.hands[1] = self.hands[1]
-  self.hands[2] = self.hands[2]
-  self.hands[3] = self.hands[3]
-  self.hands[4] = self.hands[4]
 end
 =end
 
-  def valid
+  def valid?
     #全体の形式チェック
     if self.cards.match(FORMATCHECK) == nil
       self.error_message ="5つのカード指定文字を半角スペース区切りで入力してください。（例："+"S1 H3 D9 C13 S11"+"）"
       @input = self.cards
       return false
+
     #文字形式チェック
     elsif
       self.hands[0].match(LETTERCHECK) == nil ||
@@ -33,39 +27,49 @@ end
       self.hands[3].match(LETTERCHECK) == nil||
       self.hands[4].match(LETTERCHECK) == nil
 
-        #各文字の形式をチェックする
-        if self.hands[0].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
-          @array1em = "1番目のカード指定文字が不正です。（#{self.hands[0]}）\r"
+      self.error_message=""
+      self.hands.each_with_index do|card,i|
+        if card.match(LETTERCHECK) == nil
+          self.error_message += "#{i+1}番目のカード指定文字が不正です。（#{self.hands[i]}）\r"
         end
-        if self.hands[1].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
-          @array2em = "2番目のカード指定文字が不正です。（#{self.hands[1]}）\r"
-        end
-        if self.hands[2].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
-          @array3em = "3番目のカード指定文字が不正です。（#{self.hands[2]}）\r"
-        end
-        if self.hands[3].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
-          @array4em = "4番目のカード指定文字が不正です。（#{self.hands[3]}）\r"
-        end
-        if self.hands[4].match(/\b[SCHD]([1-9]|1[0-3])\b/) == nil
-          @array5em = "5番目のカード指定文字が不正です。（#{self.hands[4]}）\r"
-        end
-        
-      self.error_message = "#{@array1em}#{@array2em}#{@array3em}#{@array4em}#{@array5em}半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
+      end
+      self.error_message +="半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
       return false
-#     @input = self.cards
+
     #重複チェック
-    elsif [self.hands[0],self.hands[1],self.hands[2],self.hands[3],self.hands[4]].uniq.length != 5
+    elsif self.hands.uniq.length != 5
       self.error_message ="カードが重複してます。"
-#    @input = self.cards
       return false
     end
   end
 
-
-
+  #flash,pair,straightの判定に基づき役名の判定を行う
+  def finaljudge
+    if self.flash? == true && self.straight? == true
+      return "ストレート・フラッシュ"
+    elsif self.flash? == true && self.straight? == false
+      return "フラッシュ"
+    elsif self.flash? == false && self.straight? == true
+      return "ストレート"
+    elsif self.flash? == false && self.straight? == false && self.pairjudge == "highcard"
+      return "ハイカード"
+    elsif self.pairjudge == "fourcard"
+      return "フォーカード"
+    elsif self.pairjudge == "fullhouse"
+      return "フルハウス"
+    elsif self.pairjudge == "threecard"
+      return "スリーカード"
+    elsif self.pairjudge == "twopair"
+      return "ツーペア"
+    elsif self.pairjudge == "onepair"
+      return "ワンペア"
+    else
+      return "プータロー"
+    end
+  end
 
   #flashの判定を行う
-  def fjudge
+  def flash?
     if [self.hands[0][/s|d|c|h/],
       self.hands[1][/s|d|c|h/],
       self.hands[2][/s|d|c|h/],
@@ -78,7 +82,7 @@ end
   end
 
   #straightの判定を行う
-  def sjudge
+  def straight?
     handsarraynum = [
       self.hands[0][/([1-9]|1[0-3])\b/].to_i,
       self.hands[1][/([1-9]|1[0-3])\b/].to_i,
@@ -99,7 +103,7 @@ end
   end
 
   #pairの判定を行う
-  def pjudge
+  def pairjudge
     #インスタンスで持ってる各カードから数字を抽出し、配列を作成
     handsarraynum = [
       self.hands[0][/([1-9]|1[0-3])\b/],
@@ -126,32 +130,6 @@ end
     end
   end
 
-  #flash,pair,straightの判定に基づき役名の判定を行う
-  def finaljudge
-    if self.flashj == true && self.straightj == true
-      return "ストレート・フラッシュ"
-    elsif self.flashj == true && self.straightj == false
-      return "フラッシュ"
-    elsif self.flashj == false && self.straightj == true
-      return "ストレート"
-    elsif self.flashj == false && self.straightj == false && self.pairj == "highcard"
-      return "ハイカード"
-    elsif self.pairj == "fourcard"
-      return "フォーカード"
-    elsif self.pairj == "fullhouse"
-      return "フルハウス"
-    elsif self.pairj == "threecard"
-      return "スリーカード"
-    elsif self.pairj == "twopair"
-      return "ツーペア"
-    elsif self.pairj == "onepair"
-      return "ワンペア"
-    else
-      return "プータロー"
-    end
-  end
-
-
-
+#  private :flash?, :pairjudge, :straight?
 
 end
