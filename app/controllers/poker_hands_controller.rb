@@ -7,7 +7,7 @@ require "./app/services/poker_hand"
   end
 
   def judge
-    @poker_hand = PokerHand.new(params[:hands])
+    @poker_hand = PokerHand.new(params[:hand])
     if @poker_hand.valid? == false
       render("poker_hands/top")
     else
