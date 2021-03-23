@@ -19,9 +19,8 @@ LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
     elsif self.cards.grep(LETTERCHECK).count != 5
       self.error_message=""
       self.cards.each_with_index do|card,i|
-        self.error_message += "#{i+1}番目のカード指定文字が不正です。（#{self.cards[i]}）\r" if card.match(LETTERCHECK) == nil
+        self.error_message += "#{i+1}番目のカード指定文字が不正です。（#{self.cards[i]}）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。" if card.match(LETTERCHECK) == nil
       end
-      self.error_message +="半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
       return false
     #重複チェック
     elsif self.cards.uniq.length != 5
