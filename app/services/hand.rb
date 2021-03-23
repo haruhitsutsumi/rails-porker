@@ -5,12 +5,10 @@ attr_accessor :hands, :cards, :finalj, :error_message
 FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
 LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
 
-
 def initialize(cards)
   self.cards = cards
   self.hands = self.cards.split(" ")
 end
-
 
   def valid?
     #全体の形式チェック
@@ -55,8 +53,6 @@ end
       return "ツーペア"
     elsif pairjudge(self.hands) == "onepair"
       return "ワンペア"
-    else
-      return "プータロー"
     end
   end
 
@@ -130,3 +126,4 @@ end
 
 
 end
+
