@@ -5,11 +5,11 @@ attr_accessor :hands, :cards, :finalj, :error_message
 FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
 LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
 
-def initialize(cards)
-  self.cards = cards
-  self.hands = self.cards.split(" ")
-end
-
+  def initialize(cards)
+    self.cards = cards
+    self.hands = self.cards.split(" ")
+  end
+  
   def valid?
     #全体の形式チェック
     if self.cards.match(FORMATCHECK) == nil
@@ -32,7 +32,7 @@ end
       return false
     end
   end
-
+  
   #flash,pair,straightの判定に基づき役名の判定を行う
   def judge
     if flash?(self.hands) == true && straight?(self.hands) == true
@@ -122,8 +122,6 @@ end
     end
   end
   private :flash?, :pairjudge, :straight?
-
-
 
 end
 
