@@ -1,4 +1,4 @@
-class Hand
+class PokerHand
 
 attr_accessor :hands, :cards, :finalj, :error_message
 

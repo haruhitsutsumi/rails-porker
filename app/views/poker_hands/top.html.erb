@@ -4,22 +4,22 @@
       <h1>Check a Poker Hand</h1>
     </div>
     <div class="main">
-      <%= form_tag("/hands/judge")do %>
+      <%= form_tag("/pokerHands/judge")do %>
       <div class="inputarea">
-        <input class="inputbox" name="hands" value="<%= @input%>" placeholder="S10 H11 D12 C13 H1"></input>
+        <input class="inputbox" name="hands" value="<%= @poker_hand.cards%>" placeholder="S10 H11 D12 C13 H1"></input>
       </div>
       <div class="inputbtnarea">
         <input class="inputbtn" type="submit" value="Check">
       </div>
       <% end %>
-      <% if @hand.error_message %>
+      <% if @poker_hand.error_message %>
       <div class="error_message">
-        <%= simple_format(@hand.error_message)%>
+        <%= simple_format(@poker_hand.error_message)%>
       </div>
       <% end %>
-      <% if @hand %>
+      <% if @poker_hand %>
       <div class="hand">
-        <%= @hand.finalj%>
+        <%= @poker_hand.finalj%>
       </div>
       <% end %>
     </div>
