@@ -1,31 +1,33 @@
 class PokerHand
 
 attr_accessor :hand
-attr_reader  :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :finalj, :error_message, :format_check, :letter_check, :duplicate_check
+attr_reader  :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :finalj, :error_message, :format_check, :letter_check, :duplicate_check
 
 FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
 LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
+EXTRACTNUMBER = /([1-9]|1[0-3])\b/
+EXTRACTSUIT = /S|D|C|H/
 
   def initialize(hand)
     self.hand = hand
     self.cards = self.hand.split(" ")
     self.numbers=[
-      self.cards[0][/([1-9]|1[0-3])\b/].to_i,
-      self.cards[1][/([1-9]|1[0-3])\b/].to_i,
-      self.cards[2][/([1-9]|1[0-3])\b/].to_i,
-      self.cards[3][/([1-9]|1[0-3])\b/].to_i,
-      self.cards[4][/([1-9]|1[0-3])\b/].to_i]
+      self.cards[0][EXTRACTNUMBER].to_i,
+      self.cards[1][EXTRACTNUMBER].to_i,
+      self.cards[2][EXTRACTNUMBER].to_i,
+      self.cards[3][EXTRACTNUMBER].to_i,
+      self.cards[4][EXTRACTNUMBER].to_i]
     self.suits=[
-      self.cards[0][/S|D|C|H/],
-      self.cards[1][/S|D|C|H/],
-      self.cards[2][/S|D|C|H/],
-      self.cards[3][/S|D|C|H/],
-      self.cards[4][/S|D|C|H/]]
+      self.cards[0][EXTRACTSUIT],
+      self.cards[1][EXTRACTSUIT],
+      self.cards[2][EXTRACTSUIT],
+      self.cards[3][EXTRACTSUIT],
+      self.cards[4][EXTRACTSUIT]]
     self.same_number_pair = self.numbers.group_by{|han| han}.map{|k,v| v.count}
   end
   
+  #入力チェック
   def valid?
-    #全体の形式チェック
     self.format_check?
     self.letter_check?
     self.duplicate_check?
@@ -46,58 +48,58 @@ LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
     end
   end
 
-
-#手札（hand）が半角スペースで区切られているか、また5枚のカードから構成されているかの形式チェック
-def format_check?
-  if self.hand.match(FORMATCHECK) == nil
-    self.format_check = false
-  else
-    self.format_check = true
-  end
-end
-
-def letter_check?
-  if self.cards.grep(LETTERCHECK).count != 5
-    self.letter_check = false
-  else
-    self.letter_check = true
-  end
-end
-
-def duplicate_check?
-  if self.cards.uniq.length != 5
-    self.duplicate_check = false
-  else
-    self.duplicate_check = true
-  end
-end
-
-
-
   #flash,straightの判定とsame_number_pairに基づき役名の判定を行う
   def judge
     self.flash?
     self.straight?
-    if self.flash == true && self.straight == true
+    self.pair
+    case [self.flash,self.straight,self.pair]
+    when [true,true,"highcard"]
       self.finalj =  "ストレート・フラッシュ"
-    elsif self.flash == true && self.straight == false
-      self.finalj =  "フラッシュ"
-    elsif self.flash == false && self.straight == true
+    when [false,true,"highcard"]
       self.finalj =  "ストレート"
-    elsif self.same_number_pair.max==4
+    when [true,false,"highcard"]
+      self.finalj =  "フラッシュ"
+    when [false,false,"fourcard"]
       self.finalj =  "フォーカード"
-    elsif self.same_number_pair.max== 3 && self.same_number_pair.min==2
+    when [false,false,"fullhouse"]
       self.finalj =  "フルハウス"
-    elsif self.same_number_pair.max== 3 && self.same_number_pair.min==1
+    when [false,false,"threecard"]
       self.finalj =  "スリーカード"
-    elsif self.same_number_pair.max== 2 && self.same_number_pair.sort[-2]==2
+    when [false,false,"twopair"]
       self.finalj =  "ツーペア"
-    elsif self.same_number_pair.max== 2 && self.same_number_pair.sort[-2]==1
+    when [false,false,"onepair"]
       self.finalj =  "ワンペア"
-    else
+    when [false,false,"highcard"]
       self.finalj =  "ハイカード"
     end
   end
+
+  #手札（hand）が半角スペースで区切られているか、また5枚のカードから構成されているかの形式チェック
+  def format_check?
+    if self.hand.match(FORMATCHECK) == nil
+      self.format_check = false
+    else
+      self.format_check = true
+    end
+  end
+  #カード（cards）の形式が間違ってないかチェック
+  def letter_check?
+    if self.cards.grep(LETTERCHECK).count != 5
+      self.letter_check = false
+    else
+      self.letter_check = true
+    end
+  end
+  #カードが重複してないかチェック
+  def duplicate_check?
+    if self.cards.uniq.length != 5
+      self.duplicate_check = false
+    else
+      self.duplicate_check = true
+    end
+  end
+
 
   #flashの判定を行う
   def flash?
@@ -125,7 +127,24 @@ end
     end
   end
 
-  private :flash?, :straight?, :format_check?, :letter_check?, :duplicate_check?
+  #pairの判定を行う
+  def pair
+    if self.same_number_pair.max==4
+      self.pair =  "fourcard"
+    elsif self.same_number_pair.max== 3 && self.same_number_pair.min==2
+      self.pair =  "fullhouse"
+    elsif self.same_number_pair.max== 3 && self.same_number_pair.min==1
+      self.pair =  "threecard"
+    elsif self.same_number_pair.max== 2 && self.same_number_pair.sort[-2]==2
+      self.pair =  "twopair"
+    elsif self.same_number_pair.max== 2 && self.same_number_pair.sort[-2]==1
+      self.pair =  "onepair"
+    else
+      self.pair =  "highcard"
+    end
+  end
+
+  private :flash?, :straight?, :pair, :format_check?, :letter_check?, :duplicate_check?
   
 
 end
