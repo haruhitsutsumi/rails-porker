@@ -1,7 +1,7 @@
 class PokerHand
 
 attr_accessor :hand
-attr_reader  :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :finalj, :error_message
+attr_reader  :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :finalj, :error_message, :format_check, :letter_check, :duplicate_check
 
 FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
 LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
@@ -26,24 +26,55 @@ LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
   
   def valid?
     #全体の形式チェック
-    if self.hand.match(FORMATCHECK) == nil
+    self.format_check?
+    self.letter_check?
+    self.duplicate_check?
+    if self.format_check == false
       self.error_message ="5つのカード指定文字を半角スペース区切りで入力してください。（例："+"S1 H3 D9 C13 S11"+"）"
       return false
-    #文字形式チェック
-    elsif self.cards.grep(LETTERCHECK).count != 5
+    elsif self.letter_check == false
       self.error_message=""
       self.cards.each_with_index do|card,i|
-        self.error_message += "#{i+1}番目のカード指定文字が不正です。（#{self.cards[i]}）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。" if card.match(LETTERCHECK) == nil
+      self.error_message += "#{i+1}番目のカード指定文字が不正です。（#{self.cards[i]}）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。" if card.match(LETTERCHECK) == nil
       end
       return false
-    #重複チェック
-    elsif self.cards.uniq.length != 5
+    elsif self.duplicate_check == false
       self.error_message ="カードが重複してます。"
       return false
+    else
+      return true
     end
   end
 
-  #flash,pair,straightの判定に基づき役名の判定を行う
+
+#手札（hand）が半角スペースで区切られているか、また5枚のカードから構成されているかの形式チェック
+def format_check?
+  if self.hand.match(FORMATCHECK) == nil
+    self.format_check = false
+  else
+    self.format_check = true
+  end
+end
+
+def letter_check?
+  if self.cards.grep(LETTERCHECK).count != 5
+    self.letter_check = false
+  else
+    self.letter_check = true
+  end
+end
+
+def duplicate_check?
+  if self.cards.uniq.length != 5
+    self.duplicate_check = false
+  else
+    self.duplicate_check = true
+  end
+end
+
+
+
+  #flash,straightの判定とsame_number_pairに基づき役名の判定を行う
   def judge
     self.flash?
     self.straight?
@@ -94,7 +125,8 @@ LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
     end
   end
 
-  private :flash?, :straight?
+  private :flash?, :straight?, :format_check?, :letter_check?, :duplicate_check?
+  
 
 end
 
