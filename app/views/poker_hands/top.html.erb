@@ -4,7 +4,7 @@
       <h1>Check a Poker Hand</h1>
     </div>
     <div class="main">
-      <%= form_tag("/pokerHands/judge")do %>
+      <%= form_tag("/poker_hands/judge")do %>
       <div class="inputarea">
         <input class="inputbox" name="hand" value="<%= @poker_hand.hand %>" placeholder="S10 H11 D12 C13 H1"></input>
       </div>
@@ -18,7 +18,7 @@
       </div>
       <% end %>
       <div class="hand">
-        <%= @poker_hand.finalj%>
+        <%= @poker_hand.role%>
       </div>
     </div>
     <div class="footer">

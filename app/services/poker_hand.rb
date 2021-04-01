@@ -1,8 +1,7 @@
 # ポーカーの手札のクラス
 class PokerHand
   attr_accessor :hand
-  attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :finalj, :error_message,
-              :format_check, :letter_check, :duplicate_check
+  attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :role, :error_message
 
   FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/.freeze
   LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/.freeze
@@ -16,22 +15,11 @@ class PokerHand
 
   # 入力チェック
   def valid?
-    format_check?
-    letter_check?
-    duplicate_check?
-    if @format_check == false
-      @error_message = ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
+    if valid_format? == false
       false
-    elsif @letter_check == false
-      @error_message = ''
-      @cards.each_with_index do |card, i|
-        if card.match(LETTERCHECK).nil?
-          @error_message += "#{i + 1}番目のカード指定文字が不正です。（#{@cards[i]}）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
-        end
-      end
+    elsif valid_letter? == false
       false
-    elsif @duplicate_check == false
-      @error_message = 'カードが重複してます。'
+    elsif duplicated? == false
       false
     else
       true
@@ -45,39 +33,58 @@ class PokerHand
     pair_check
     case [@flash, @straight, @pair]
     when [true, true, 'highcard']
-      @finalj =  'ストレート・フラッシュ'
+      @role =  'ストレート・フラッシュ'
     when [false, true, 'highcard']
-      @finalj =  'ストレート'
+      @role =  'ストレート'
     when [true, false, 'highcard']
-      @finalj =  'フラッシュ'
+      @role =  'フラッシュ'
     when [false, false, 'fourcard']
-      @finalj =  'フォーカード'
+      @role =  'フォーカード'
     when [false, false, 'fullhouse']
-      @finalj =  'フルハウス'
+      @role =  'フルハウス'
     when [false, false, 'threecard']
-      @finalj =  'スリーカード'
+      @role =  'スリーカード'
     when [false, false, 'twopair']
-      @finalj =  'ツーペア'
+      @role =  'ツーペア'
     when [false, false, 'onepair']
-      @finalj =  'ワンペア'
+      @role =  'ワンペア'
     when [false, false, 'highcard']
-      @finalj =  'ハイカード'
+      @role =  'ハイカード'
     end
   end
 
   # 手札（hand）が半角スペースで区切られているか、また5枚のカードから構成されているかの形式チェック
-  def format_check?
-    @format_check = !@hand.match(FORMATCHECK).nil?
+  def valid_format?
+    if @hand.match(FORMATCHECK)
+      true
+    else
+      @error_message = ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
+      false
+    end
   end
 
   # カード（cards）の形式が間違ってないかチェック
-  def letter_check?
-    @letter_check = (@cards.grep(LETTERCHECK).count == 5)
+  def valid_letter?
+    if @cards.grep(LETTERCHECK).count == 5
+      true
+    else
+      @error_message = ''
+      @cards.each_with_index do |card, i|
+        @error_message += "#{i + 1}番目のカード指定文字が不正です。（#{@cards[i]}）\r" unless card.match(LETTERCHECK)
+      end
+      @error_message += '半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。'
+      false
+    end
   end
 
   # カードが重複してないかチェック
-  def duplicate_check?
-    @duplicate_check = (@cards.uniq.length == 5)
+  def duplicated?
+    if @cards.uniq.length == 5
+      true
+    else
+      @error_message = 'カードが重複してます。'
+      false
+    end
   end
 
   # flashの判定を行う
@@ -134,5 +141,5 @@ class PokerHand
             end
   end
 
-  private :flash?, :straight?, :pair, :format_check?, :letter_check?, :duplicate_check?
+  private :flash?, :straight?, :pair, :valid_format?, :valid_letter?, :duplicated?
 end
