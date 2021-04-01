@@ -1,3 +1,4 @@
+# ポーカーのサービス層のテストクラス
 require 'rails_helper'
 
 RSpec.describe 'Service層のテスト' do
@@ -5,7 +6,7 @@ RSpec.describe 'Service層のテスト' do
   #  end
   describe 'バリデーションのメソッドのテスト' do
     it '文字列の形式が間違っているとfalseが返ること' do
-      hand = PokerHand.new("S1 C3 H4 D8")
+      hand = PokerHand.new('S1 C3 H4 D8')
       expect(hand.valid?).to eq false
     end
     it '文字の形式が間違っているとfalseが返ること'

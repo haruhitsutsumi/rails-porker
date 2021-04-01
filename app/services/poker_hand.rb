@@ -1,15 +1,17 @@
+# ポーカーの手札のクラス
 class PokerHand
   attr_accessor :hand
-  attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :finalj, :error_message, :format_check, :letter_check, :duplicate_check
+  attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :finalj, :error_message,
+              :format_check, :letter_check, :duplicate_check
 
-  FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/
-  LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/
-  EXTRACTNUMBER = /([1-9]|1[0-3])\b/
-  EXTRACTSUIT = /S|D|C|H/
+  FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/.freeze
+  LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/.freeze
+  EXTRACTNUMBER = /([1-9]|1[0-3])\b/.freeze
+  EXTRACTSUIT = /S|D|C|H/.freeze
 
   def initialize(hand)
     @hand = hand
-    @cards = @hand.split(" ")
+    @cards = @hand.split(' ')
   end
 
   # 入力チェック
@@ -18,19 +20,21 @@ class PokerHand
     letter_check?
     duplicate_check?
     if @format_check == false
-      @error_message = "5つのカード指定文字を半角スペース区切りで入力してください。（例：" + "S1 H3 D9 C13 S11" + "）"
-      return false
+      @error_message = ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
+      false
     elsif @letter_check == false
-      @error_message = ""
+      @error_message = ''
       @cards.each_with_index do |card, i|
-        @error_message += "#{i + 1}番目のカード指定文字が不正です。（#{@cards[i]}）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。" if card.match(LETTERCHECK) == nil
+        if card.match(LETTERCHECK).nil?
+          @error_message += "#{i + 1}番目のカード指定文字が不正です。（#{@cards[i]}）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
+        end
       end
-      return false
+      false
     elsif @duplicate_check == false
-      @error_message = "カードが重複してます。"
-      return false
+      @error_message = 'カードが重複してます。'
+      false
     else
-      return true
+      true
     end
   end
 
@@ -38,32 +42,32 @@ class PokerHand
   def judge
     flash?
     straight?
-    pair
+    pair_check
     case [@flash, @straight, @pair]
-    when [true, true, "highcard"]
-      @finalj =  "ストレート・フラッシュ"
-    when [false, true, "highcard"]
-      @finalj =  "ストレート"
-    when [true, false, "highcard"]
-      @finalj =  "フラッシュ"
-    when [false, false, "fourcard"]
-      @finalj =  "フォーカード"
-    when [false, false, "fullhouse"]
-      @finalj =  "フルハウス"
-    when [false, false, "threecard"]
-      @finalj =  "スリーカード"
-    when [false, false, "twopair"]
-      @finalj =  "ツーペア"
-    when [false, false, "onepair"]
-      @finalj =  "ワンペア"
-    when [false, false, "highcard"]
-      @finalj =  "ハイカード"
+    when [true, true, 'highcard']
+      @finalj =  'ストレート・フラッシュ'
+    when [false, true, 'highcard']
+      @finalj =  'ストレート'
+    when [true, false, 'highcard']
+      @finalj =  'フラッシュ'
+    when [false, false, 'fourcard']
+      @finalj =  'フォーカード'
+    when [false, false, 'fullhouse']
+      @finalj =  'フルハウス'
+    when [false, false, 'threecard']
+      @finalj =  'スリーカード'
+    when [false, false, 'twopair']
+      @finalj =  'ツーペア'
+    when [false, false, 'onepair']
+      @finalj =  'ワンペア'
+    when [false, false, 'highcard']
+      @finalj =  'ハイカード'
     end
   end
 
   # 手札（hand）が半角スペースで区切られているか、また5枚のカードから構成されているかの形式チェック
   def format_check?
-    @format_check != (@hand.match(FORMATCHECK).nil?)
+    @format_check = !@hand.match(FORMATCHECK).nil?
   end
 
   # カード（cards）の形式が間違ってないかチェック
@@ -108,7 +112,7 @@ class PokerHand
   end
 
   # pairの判定を行う
-  def pair
+  def pair_check
     @numbers = [@cards[0][EXTRACTNUMBER].to_i,
                 @cards[1][EXTRACTNUMBER].to_i,
                 @cards[2][EXTRACTNUMBER].to_i,
@@ -116,17 +120,17 @@ class PokerHand
                 @cards[4][EXTRACTNUMBER].to_i]
     @same_number_pair = @numbers.group_by { |card| card }.values.map(&:count)
     @pair = if @same_number_pair.max == 4
-              "fourcard"
+              'fourcard'
             elsif @same_number_pair.max == 3 && @same_number_pair.min == 2
-              "fullhouse"
+              'fullhouse'
             elsif @same_number_pair.max == 3 && @same_number_pair.min == 1
-              "threecard"
+              'threecard'
             elsif @same_number_pair.max == 2 && @same_number_pair.sort[-2] == 2
-              "twopair"
+              'twopair'
             elsif @same_number_pair.max == 2 && @same_number_pair.sort[-2] == 1
-              "onepair"
+              'onepair'
             else
-              "highcard"
+              'highcard'
             end
   end
 

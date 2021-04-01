@@ -7,11 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-Lint/DuplicateMethods:
-  Exclude:
-    - 'app/services/poker_hand.rb'
-
-# Offense count: 1
 # Configuration parameters: AllowComments.
 Lint/EmptyFile:
   Exclude:
@@ -42,54 +37,6 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 13
 
-# Offense count: 11
-# Configuration parameters: AllowedChars.
-# AllowedChars: ©
-Style/AsciiComments:
-  Exclude:
-    - 'app/controllers/poker_hands_controller.rb'
-    - 'app/services/poker_hand.rb'
-    - 'spec/services/poker_hand_spec.rb'
-
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SingleLineConditionsOnly, IncludeTernaryExpressions.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-#Style/ConditionalAssignment:
-#  Exclude:
-#    - 'app/services/poker_hand.rb'
-
-# Offense count: 6
-# Configuration parameters: AllowedConstants.
-Style/Documentation:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'app/controllers/poker_hands_controller.rb'
-    - 'app/helpers/application_helper.rb'
-    - 'app/helpers/home_helper.rb'
-    - 'app/models/application_record.rb'
-    - 'app/services/poker_hand.rb'
-    - 'config/application.rb'
-
-# Offense count: 6
-# Cop supports --auto-correct.
-Style/ExpandPathArguments:
-  Exclude:
-    - 'bin/bundle'
-    - 'bin/rails'
-    - 'bin/rake'
-    - 'bin/rspec'
-    - 'bin/setup'
-    - 'bin/update'
-
-# Offense count: 44
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: always, always_true, never
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/GlobalStdStream:
@@ -97,44 +44,10 @@ Style/GlobalStdStream:
     - 'config/environments/production.rb'
 
 # Offense count: 2
-Style/IdenticalConditionalBranches:
-  Exclude:
-    - 'app/controllers/poker_hands_controller.rb'
-
-# Offense count: 2
 Style/MixinUsage:
   Exclude:
     - 'bin/setup'
     - 'bin/update'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: literals, strict
-Style/MutableConstant:
-  Exclude:
-    - 'app/services/poker_hand.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: predicate, comparison
-Style/NilComparison:
-  Exclude:
-    - 'app/services/poker_hand.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: Strict.
-Style/NumericLiterals:
-  MinDigits: 15
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'config/spring.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -148,45 +61,3 @@ Style/RedundantFetchBlock:
 Style/RedundantRegexpCharacterClass:
   Exclude:
     - 'app/services/poker_hand.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleReturnValues.
-Style/RedundantReturn:
-  Exclude:
-    - 'app/services/poker_hand.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/StringConcatenation:
-  Exclude:
-    - 'app/services/poker_hand.rb'
-
-# Offense count: 59
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Exclude:
-    - 'app/controllers/poker_hands_controller.rb'
-    - 'app/services/poker_hand.rb'
-    - 'config/environments/production.rb'
-    - 'config/puma.rb'
-    - 'config/routes.rb'
-    - 'db/schema.rb'
-    - 'spec/rails_helper.rb'
-    - 'spec/services/poker_hand_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: MinSize.
-# SupportedStyles: percent, brackets
-Style/SymbolArray:
-  EnforcedStyle: brackets
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: AutoCorrect, AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
-# URISchemes: http, https
-Layout/LineLength:
-  Max: 157

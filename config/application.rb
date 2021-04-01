@@ -1,3 +1,4 @@
+# クラス
 require_relative 'boot'
 require 'rails/all'
 
@@ -6,6 +7,7 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Porker
+  # クラス
   class Application < Rails::Application
     #    config.load_defaults 5.1
     # Settings in config/environments/* take precedence over those specified here.

@@ -10,20 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210317124241) do
-  create_table "hands", force: :cascade do |t|
-    t.boolean  "flashj"
-    t.string   "pairj"
-    t.boolean  "straightj"
-    t.string   "finalj"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "array1"
-    t.string   "array2"
-    t.string   "array3"
-    t.string   "array4"
-    t.string   "array5"
-    t.string   "cards"
-    t.string   "error_message"
+ActiveRecord::Schema.define(version: 20_210_317_124_241) do
+  create_table 'hands', force: :cascade do |t|
+    t.boolean  'flashj'
+    t.string   'pairj'
+    t.boolean  'straightj'
+    t.string   'finalj'
+    t.datetime 'created_at',    null: false
+    t.datetime 'updated_at',    null: false
+    t.string   'array1'
+    t.string   'array2'
+    t.string   'array3'
+    t.string   'array4'
+    t.string   'array5'
+    t.string   'cards'
+    t.string   'error_message'
   end
 end
