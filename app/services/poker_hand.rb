@@ -3,7 +3,7 @@ class PokerHand
   attr_accessor :hand
   attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :role, :error_message
 
-  FORMATCHECK = /\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/.freeze
+  FORMATCHECK = /^[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/.freeze
   LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/.freeze
   EXTRACTNUMBER = /([1-9]|1[0-3])\b/.freeze
   EXTRACTSUIT = /S|D|C|H/.freeze
@@ -58,7 +58,7 @@ class PokerHand
     if @hand.match(FORMATCHECK)
       true
     else
-      @error_message = ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
+      @error_message = ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"） '
       false
     end
   end
