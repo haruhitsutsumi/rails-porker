@@ -20,5 +20,6 @@ module Porker
                        helper_specs: false,
                        routing_specs: false
     end
+  config.autoload_paths += Dir.glob("#{config.root}/controllers/api/poker_hands_apis_controller.rb")
   end
 end

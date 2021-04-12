@@ -1,7 +1,7 @@
 # ポーカーの手札のクラス
 class PokerHand
-  attr_accessor :hand
-  attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :role, :error_message
+  attr_accessor :hand, :best
+  attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :role, :error_message, :strength
 
   FORMATCHECK = /^[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/.freeze
   LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/.freeze
@@ -34,22 +34,31 @@ class PokerHand
     case [@flash, @straight, @pair]
     when [true, true, 'highcard']
       @role =  'ストレート・フラッシュ'
+      @strength = 9
     when [false, true, 'highcard']
       @role =  'ストレート'
+      @strength = 5
     when [true, false, 'highcard']
       @role =  'フラッシュ'
+      @strength = 6
     when [false, false, 'fourcard']
       @role =  'フォーカード'
+      @strength = 8
     when [false, false, 'fullhouse']
       @role =  'フルハウス'
+      @strength = 7
     when [false, false, 'threecard']
       @role =  'スリーカード'
+      @strength = 4
     when [false, false, 'twopair']
       @role =  'ツーペア'
+      @strength = 3
     when [false, false, 'onepair']
       @role =  'ワンペア'
+      @strength = 2
     when [false, false, 'highcard']
       @role =  'ハイカード'
+      @strength = 1
     end
   end
 
@@ -120,11 +129,6 @@ class PokerHand
 
   # pairの判定を行う
   def pair_check
-    @numbers = [@cards[0][EXTRACTNUMBER].to_i,
-                @cards[1][EXTRACTNUMBER].to_i,
-                @cards[2][EXTRACTNUMBER].to_i,
-                @cards[3][EXTRACTNUMBER].to_i,
-                @cards[4][EXTRACTNUMBER].to_i]
     @same_number_pair = @numbers.group_by { |card| card }.values.map(&:count)
     @pair = if @same_number_pair.max == 4
               'fourcard'
