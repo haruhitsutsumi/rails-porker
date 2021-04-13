@@ -7,3 +7,7 @@ Style/FrozenStringLiteralComment:
 # 日本語でのコメントを許可
 AsciiComments:
   Enabled: false
+
+# ハッシュはロケットでなく:を使用する
+HashSyntax:
+  EnforcedStyle: ruby19

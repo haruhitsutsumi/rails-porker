@@ -12,7 +12,7 @@ RSpec.describe PokerHandsController do
     example 'topテンプレードを表示すること' do
       expect(response).to render_template :top
     end
-    example '@poker_handが引数''で生成されていること' do
+    example '@poker_handが引数なしで生成されていること' do
       poker_hand = PokerHand.new('')
       expect(assigns(:poker_hand).hand).to eq poker_hand.hand
       expect(assigns(:poker_hand).cards).to eq poker_hand.cards
@@ -21,7 +21,7 @@ RSpec.describe PokerHandsController do
   describe 'Post #judge' do
     describe 'valid?メソッドの結果がfalseの時' do
       before do
-        post :judge, params: {hand: 'S1 C3 H4 D8'}
+        post :judge, params: { hand: 'S1 C3 H4 D8' }
       end
       example 'ステータスが200であること' do
         expect(response.status).to eq 200
@@ -35,7 +35,7 @@ RSpec.describe PokerHandsController do
     end
     describe 'valid?メソッドの結果がtrueの時' do
       before do
-        post :judge, params: {hand: 'S1 C3 H4 D8 D9'}
+        post :judge, params: { hand: 'S1 C3 H4 D8 D9' }
       end
       example 'ステータスが200であること' do
         expect(response.status).to eq 200

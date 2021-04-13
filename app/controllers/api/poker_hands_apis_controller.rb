@@ -8,7 +8,7 @@ class Api::PokerHandsApisController < ApplicationController
     # jsonをパラメータで受け取る
     @cards = params[:cards]
     strength_judge
-    
+
     # json形式で返す
     render json: @response
   end

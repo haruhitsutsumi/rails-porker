@@ -3,7 +3,7 @@ class PokerHand
   attr_accessor :hand, :best
   attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :role, :error_message, :strength
 
-  FORMATCHECK = /^[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b[ ]{1}\b[^ ]+\b$/.freeze
+  FORMATCHECK = /^[^ ]+\b {1}\b[^ ]+\b {1}\b[^ ]+\b {1}\b[^ ]+\b {1}\b[^ ]+\b$/.freeze
   LETTERCHECK = /\b[SCHD]([1-9]|1[0-3])\b/.freeze
   EXTRACTNUMBER = /([1-9]|1[0-3])\b/.freeze
   EXTRACTSUIT = /S|D|C|H/.freeze
@@ -33,31 +33,31 @@ class PokerHand
     pair_check
     case [@flash, @straight, @pair]
     when [true, true, 'highcard']
-      @role =  'ストレート・フラッシュ'
+      @role = 'ストレート・フラッシュ'
       @strength = 9
     when [false, true, 'highcard']
-      @role =  'ストレート'
+      @role = 'ストレート'
       @strength = 5
     when [true, false, 'highcard']
-      @role =  'フラッシュ'
+      @role = 'フラッシュ'
       @strength = 6
     when [false, false, 'fourcard']
-      @role =  'フォーカード'
+      @role = 'フォーカード'
       @strength = 8
     when [false, false, 'fullhouse']
-      @role =  'フルハウス'
+      @role = 'フルハウス'
       @strength = 7
     when [false, false, 'threecard']
-      @role =  'スリーカード'
+      @role = 'スリーカード'
       @strength = 4
     when [false, false, 'twopair']
-      @role =  'ツーペア'
+      @role = 'ツーペア'
       @strength = 3
     when [false, false, 'onepair']
-      @role =  'ワンペア'
+      @role = 'ワンペア'
       @strength = 2
     when [false, false, 'highcard']
-      @role =  'ハイカード'
+      @role = 'ハイカード'
       @strength = 1
     end
   end
