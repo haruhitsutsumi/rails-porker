@@ -23,14 +23,14 @@ RSpec.describe PokerHandsController do
       before do
         post :judge, params: { hand: 'S1 C3 H4 D8' }
       end
-      example 'ステータスが200であること' do
-        expect(response.status).to eq 200
+      example 'ステータスが400であること' do
+        expect(response.status).to eq 400
       end
       example 'topテンプレードを表示すること' do
         expect(response).to render_template :top
       end
-      example '@roleがnilであること' do
-        expect(assigns(:poker_hand).role).to eq nil
+      example '@roleが空のハッシュであること' do
+        expect(assigns(:poker_hand).role).to be_empty
       end
     end
     describe 'valid?メソッドの結果がtrueの時' do
@@ -43,8 +43,8 @@ RSpec.describe PokerHandsController do
       example 'topテンプレードを表示すること' do
         expect(response).to render_template :top
       end
-      example '@roleがnilではないこと' do
-        expect(assigns(:poker_hand).role).not_to eq nil
+      example '@roleが空のハッシュではないこと' do
+        expect(assigns(:poker_hand).role).not_to be_empty
       end
     end
   end

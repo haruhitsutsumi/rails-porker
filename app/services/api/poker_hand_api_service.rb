@@ -25,16 +25,12 @@ class PokerHandApiService
       # 強さを配列に格納
       strength_arry.push(poker_hand.role[:strength])
     end
-    @best = strength_arry.max
-    # オブジェクト配列に繰り返し処理を行う
-    poker_hand_array.each do |poker_hand|
-      # 役の強さが強さ配列の最大値と等しいかどうか確認
-      poker_hand.best = poker_hand.role[:strength] == @best
-    end
 
-    # jsonの形に変形
+    @best = strength_arry.max
+
+    # ハッシュに変形
     @response = poker_hand_array.map do |poker_hand|
-      { "card": poker_hand.hand, "hand": poker_hand.role[:name], "best": poker_hand.best }
+      { "card": poker_hand.hand, "hand": poker_hand.role[:name], "best": poker_hand.role[:strength] == @best }
     end
     @response = { "result": @response }
   end

@@ -1,7 +1,7 @@
 # ポーカーの手札のクラス
 class PokerHand
-  attr_accessor :hand, :best
-  attr_reader :cards, :suits, :numbers, :same_number_pair, :straight, :flash, :pair, :role, :error_message
+  attr_accessor :hand
+  attr_reader :cards, :numbers, :straight, :flash, :pair, :role, :error_message
 
   require './app/helpers/const/role'
   require './app/helpers/const/regex'
@@ -98,12 +98,12 @@ class PokerHand
 
   # flashの判定を行う
   def flash?
-    @suits = [@cards[0][Const::Regex::EXTRACTSUIT],
-              @cards[1][Const::Regex::EXTRACTSUIT],
-              @cards[2][Const::Regex::EXTRACTSUIT],
-              @cards[3][Const::Regex::EXTRACTSUIT],
-              @cards[4][Const::Regex::EXTRACTSUIT]]
-    @flash = @suits.uniq.length == 1
+    suits = [@cards[0][Const::Regex::EXTRACTSUIT],
+            @cards[1][Const::Regex::EXTRACTSUIT],
+            @cards[2][Const::Regex::EXTRACTSUIT],
+            @cards[3][Const::Regex::EXTRACTSUIT],
+            @cards[4][Const::Regex::EXTRACTSUIT]]
+    @flash = suits.uniq.length == 1
   end
 
   # straightの判定を行う
@@ -129,16 +129,16 @@ class PokerHand
 
   # pairの判定を行う
   def pair_check
-    @same_number_pair = @numbers.group_by { |card| card }.values.map(&:count)
-    @pair = if @same_number_pair.max == 4
+    same_number_pair = @numbers.group_by { |card| card }.values.map(&:count)
+    @pair = if same_number_pair.max == 4
               'fourcard'
-            elsif @same_number_pair.max == 3 && @same_number_pair.min == 2
+            elsif same_number_pair.max == 3 && same_number_pair.min == 2
               'fullhouse'
-            elsif @same_number_pair.max == 3 && @same_number_pair.min == 1
+            elsif same_number_pair.max == 3 && same_number_pair.min == 1
               'threecard'
-            elsif @same_number_pair.max == 2 && @same_number_pair.sort[-2] == 2
+            elsif same_number_pair.max == 2 && same_number_pair.sort[-2] == 2
               'twopair'
-            elsif @same_number_pair.max == 2 && @same_number_pair.sort[-2] == 1
+            elsif same_number_pair.max == 2 && same_number_pair.sort[-2] == 1
               'onepair'
             else
               'highcard'
