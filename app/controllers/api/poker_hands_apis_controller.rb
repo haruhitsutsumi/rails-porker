@@ -1,15 +1,14 @@
 # ポーカーのAPIのコントローラー
 class Api::PokerHandsApisController < ApplicationController
   require './app/services/poker_hand'
-  require './app/services/api/poker_hand_api'
-  include PokerHandApi
+  require './app/services/api/poker_hand_api_service'
 
-  def top
-    # jsonをパラメータで受け取る
-    @cards = params[:cards]
-    strength_judge
+  def judge
+    # 受け取ったパラメータを引数にインスタンス生成
+    @poker_hands = PokerHandApiService.new(params[:cards])
+    @poker_hands.strength_judge
 
     # json形式で返す
-    render json: @response
+    render json: @poker_hands.response
   end
 end

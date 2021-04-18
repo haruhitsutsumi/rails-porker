@@ -11,3 +11,7 @@ AsciiComments:
 # ハッシュはロケットでなく:を使用する
 HashSyntax:
   EnforcedStyle: ruby19
+  
+# モジュールの名前空間をコンパクトスタイルにする
+ClassAndModuleChildren:
+  EnforcedStyle: compact
