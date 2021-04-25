@@ -1,5 +1,5 @@
+# クラス
 require_relative 'boot'
-
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -7,9 +7,20 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Porker
+  # クラス
   class Application < Rails::Application
+    #    config.load_defaults 5.1
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    config.generators do |g|
+      g.test_framework :rspec,
+                       fixtures: false,
+                       view_specs: false,
+                       helper_specs: false,
+                       routing_specs: false
+    end
+    config.autoload_paths += Dir.glob("#{config.root}/controllers/api/poker_hands_apis_controller.rb")
+    config.autoload_paths += Dir.glob("#{config.root}/helpers/role_helper.rb")
   end
 end

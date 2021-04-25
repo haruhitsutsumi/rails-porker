@@ -1,0 +1,17 @@
+inherit_from: .rubocop_todo.yml
+
+# 文字リテラルのイミュータブル宣言を無視（freezeになるのはRuby3以降）
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# 日本語でのコメントを許可
+AsciiComments:
+  Enabled: false
+
+# ハッシュはロケットでなく:を使用する
+HashSyntax:
+  EnforcedStyle: ruby19
+  
+# モジュールの名前空間をコンパクトスタイルにする
+ClassAndModuleChildren:
+  EnforcedStyle: compact
