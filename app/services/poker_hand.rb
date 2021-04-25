@@ -3,13 +3,6 @@ class PokerHand
   attr_accessor :hand
   attr_reader :cards, :numbers, :straight, :flash, :pair, :role, :error_message
 
-  require './app/helpers/const/role'
-  require './app/helpers/const/regex'
-  require './app/helpers/const/error_message'
-  include Const::Regex
-  include Const::Role
-  include Const::ErrorMessage
-
   def initialize(hand)
     @hand = hand
     @cards = @hand.split(' ')
@@ -18,15 +11,8 @@ class PokerHand
 
   # 入力チェック
   def valid?
-    if valid_format? == false
-      false
-    elsif valid_letter? == false
-      false
-    elsif duplicated? == false
-      false
-    else
-      true
-    end
+    return true if valid_format? || valid_letter? || duplicated?
+    false
   end
 
   # flash,straightの判定とsame_number_pairに基づき役名の判定を行う
@@ -59,17 +45,17 @@ class PokerHand
   # 手札（hand）が半角スペースで区切られているか、また5枚のカードから構成されているかの形式チェック
   def valid_format?
     if @hand.match(Const::Regex::FORMATCHECK)
-      true
+      false
     else
       @error_message = Const::ErrorMessage::FORMATERROR
-      false
+      true
     end
   end
 
   # カード（cards）の形式が間違ってないかチェック
   def valid_letter?
     if @cards.grep(Const::Regex::LETTERCHECK).count == 5
-      true
+      false
     else
       @error_message = ''
       @cards.each_with_index do |card, i|
@@ -82,17 +68,17 @@ class PokerHand
         )
       end
       @error_message += Const::ErrorMessage::LETTERERROR
-      false
+      true
     end
   end
 
   # カードが重複してないかチェック
   def duplicated?
     if @cards.uniq.length == 5
-      true
+      false
     else
       @error_message = Const::ErrorMessage::DUPLICATEERROR
-      false
+      true
     end
   end
 
@@ -145,5 +131,5 @@ class PokerHand
             end
   end
 
-  private :flash?, :straight?, :pair, :valid_format?, :valid_letter?, :duplicated?
+  private :flash?, :straight?, :pair_check, :valid_format?, :valid_letter?, :duplicated?
 end

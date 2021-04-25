@@ -9,6 +9,6 @@ class Api::PokerHandsApisController < ApplicationController
     @poker_hands.strength_judge
 
     # json形式で返す
-    render json: @poker_hands.response
+    render json: @poker_hands.whole_result
   end
 end
