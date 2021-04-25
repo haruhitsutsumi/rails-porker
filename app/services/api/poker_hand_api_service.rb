@@ -37,7 +37,7 @@ class PokerHandApiService
     if poker_hand_array.empty? == false
       @best = strength_array.max
       results = poker_hand_array.map do |poker_hand|
-        { "card": poker_hand.hand, "_hand": poker_hand.role[:name], "best": poker_hand.role[:strength] == @best }
+        { "card": poker_hand.hand, "hand": poker_hand.role[:name], "best": poker_hand.role[:strength] == @best }
       end
       @whole_result[:results] = results
     end

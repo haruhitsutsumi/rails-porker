@@ -6,56 +6,56 @@ RSpec.describe 'Service層のテスト' do
     context 'カードが4枚のとき' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1 C3 H4 D8')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"） '
       end
     end
     context 'カードが6枚のとき' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1 C3 H4 D8 S12 S13 S7')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"） '
       end
     end
     context 'カードがスラッシュで区切られてるとき' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1/C3/H4/D8/D9')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq ' 5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"） '
       end
     end
     context '数字が1~13以外の時' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1 C14 H4 D8 C1')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq " 2番目のカード指定文字が不正です。（C14）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。 "
       end
     end
     context '数字がない時' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1 C H4 D8 C1')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq " 2番目のカード指定文字が不正です。（C）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。 "
       end
     end
     context 'スーとがSDHC以外の時' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1 A13 H4 D8 C1')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq " 2番目のカード指定文字が不正です。（A13）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。 "
       end
     end
     context 'スーとがない時' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1 13 H4 D8 C1')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq " 2番目のカード指定文字が不正です。（13）\r半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。 "
       end
     end
     context 'カードが重複している時' do
       example 'falseが返ること' do
         hand = PokerHand.new('S1 S1 H4 D8 C1')
-        expect(hand.valid?).to eq false
+        expect(hand.valid?).to eq true
         expect(hand.error_message).to eq 'カードが重複してます。'
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe 'Service層のテスト' do
       context '正しい手札のとき' do
         example 'trueが返ること' do
           hand = PokerHand.new('S1 D1 H4 D8 C1')
-          expect(hand.valid?).to eq true
+          expect(hand.valid?).to eq false
         end
       end
     end
