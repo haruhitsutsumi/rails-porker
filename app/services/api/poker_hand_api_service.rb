@@ -42,8 +42,17 @@ class PokerHandApiService
       @whole_result[:results] = results
     end
     if error_hand_array.empty? == false
-      errors = error_hand_array.map do |error_hand|
-        { "card": error_hand.hand, "message": error_hand.error_message }
+      errors = []
+      error_hand_array.map do |error_hand|
+        if error_hand.letter_error_messages.nil? == false
+          error_hand.letter_error_messages.map do |letter_error_message|
+            error = { "card": error_hand.hand, "message": letter_error_message }
+            errors.push(error)
+          end
+        else
+          error = { "card": error_hand.hand, "message": error_hand.error_message }
+          errors.push(error)
+        end
       end
       @whole_result[:errors] = errors
     end

@@ -1,7 +1,7 @@
 # ポーカーの手札のクラス
 class PokerHand
   attr_accessor :hand
-  attr_reader :cards, :numbers, :straight, :flash, :pair, :role, :error_message
+  attr_reader :cards, :numbers, :straight, :flash, :pair, :role, :error_message, :letter_error_messages
 
   def initialize(hand)
     @hand = hand
@@ -58,14 +58,16 @@ class PokerHand
       false
     else
       @error_message = ''
+      @letter_error_messages = []
       @cards.each_with_index do |card, i|
         next if card.match(Const::Regex::LETTERCHECK)
-
-        @error_message += format(
+        letter_error_message = format(
           Const::ErrorMessage::EACHLETTERERROR,
           i: i + 1,
           card: card
         )
+        @letter_error_messages.push(letter_error_message)
+        @error_message += (letter_error_message + "\r")
       end
       @error_message += Const::ErrorMessage::LETTERERROR
       true
